@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/ferrarimarco/ansible-role-ruby-install/tree/HEAD)
-
-[Full Changelog](https://github.com/ferrarimarco/ansible-role-ruby-install/compare/1.0.0...HEAD)
+## [1.1.0](https://github.com/ferrarimarco/ansible-role-ruby-install/tree/1.1.0) (2017-02-02)
+[Full Changelog](https://github.com/ferrarimarco/ansible-role-ruby-install/compare/1.0.0...1.1.0)
 
 **Implemented enhancements:**
 
