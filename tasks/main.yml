@@ -37,9 +37,6 @@
     remote_src: no
   when: ruby_install_path.stat.exists == false
 
-- debug:
-    var: ruby_install_archive_destination_path
-
 - name: Run ruby-install install target
   args:
     chdir: "{{ ruby_install_archive_destination_path }}"
