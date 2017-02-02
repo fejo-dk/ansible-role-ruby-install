@@ -11,9 +11,7 @@ ansible-galaxy install ferrarimarco.ruby-install
 ```
 
 ### Variables
-```
-ruby_install_version: 0.6.1
-```
+See [defaults/main.yml](defaults/main.yml)
 
 ### Example Playbook
 ```
