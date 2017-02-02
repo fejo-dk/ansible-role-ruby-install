@@ -1,25 +1,57 @@
 ---
+- name: Ensure required apt packages are installed
+  apt:
+    autoremove: yes
+    cache_valid_time: 3600
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  become: yes
+  with_items:
+    - curl
+    - gcc
+    - make
+    - wget
+
 - name: Check if ruby-install is already installed
   stat:
     path: /usr/local/share/doc/ruby-install-{{ ruby_install_version }}
   register: ruby_install_path
 
+- name:
+  set_fact:
+    ruby_install_archive_path: /tmp/ruby-install-{{ ruby_install_version }}.tar.gz
+    ruby_install_archive_destination_path: /tmp/ruby-install-{{ ruby_install_version }}
+
 - name: Download ruby-install package
   get_url:
     url: https://github.com/postmodern/ruby-install/archive/v{{ ruby_install_version }}.tar.gz
-    dest: /tmp/ruby-install-{{ ruby_install_version }}.tar.gz
+    dest: "{{ ruby_install_archive_path }}"
   when: ruby_install_path.stat.exists == false
 
 - name: Unarchive ruby-install package
   unarchive:
-    src: /tmp/ruby-install-{{ ruby_install_version }}.tar.gz
+    src: "{{ ruby_install_archive_path }}"
     dest: /tmp
-    creates: /tmp/ruby-install-{{ ruby_install_version }}/Makefile
+    creates: "{{ ruby_install_archive_destination_path }}/Makefile"
     remote_src: no
   when: ruby_install_path.stat.exists == false
 
+- debug:
+    var: ruby_install_archive_destination_path
+
 - name: Run ruby-install install target
+  args:
+    chdir: "{{ ruby_install_archive_destination_path }}"
   command: make install
-  become: yes
-    chdir: /tmp/ruby-install-{{ ruby_install_version }}
   when: ruby_install_path.stat.exists == false
+
+- name: Cleanup ruby-install package
+  file:
+    path: "{{ ruby_install_archive_path }}"
+    state: absent
+
+- name: Cleanup ruby-install package contents
+  file:
+    path: "{{ ruby_install_archive_destination_path }}"
+    state: absent
