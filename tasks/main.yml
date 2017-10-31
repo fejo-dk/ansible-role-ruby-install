@@ -34,7 +34,7 @@
     src: "{{ ruby_install_archive_path }}"
     dest: /tmp
     creates: "{{ ruby_install_archive_destination_path }}/Makefile"
-    remote_src: no
+    remote_src: true
   when: ruby_install_path.stat.exists == false
 
 - name: Run ruby-install install target
